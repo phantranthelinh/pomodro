@@ -6,29 +6,13 @@ Pomodro — a Pomodoro Timer web app with multi-channel ambient audio mixer, Gla
 
 ## Hard Rules — "The Law"
 
-### Rule 1: Token Efficiency
-- Only read and write files relevant to the current task.
-- Never output entire files when only a few lines changed — use diff format or minimal code blocks.
+> Rules are defined in `.claude/rules/`. Claude Code loads them automatically.
 
-### Rule 2: Modularization
-- Audio logic (`use-audio-mixer`) and timer logic (`use-timer`) must NEVER live in UI component files.
-- All business logic must be in Custom Hooks (`src/hooks/`) or Zustand stores (`src/stores/`).
-- Components are purely presentational + hook consumers.
-
-### Rule 3: UX
-- All audio interactions must be non-blocking (never block main thread).
-- Use Howler.js HTML5 audio mode for smooth playback.
-- Brand background color is always `#D0FFD6`. Glassmorphism style throughout.
-- Mobile-first responsive design.
-
-### Rule 4: No Placeholders
-- Never write `// code here`, `// TODO`, or incomplete logic.
-- Every function must have complete, working implementation.
-
-### Rule 5: Update CLAUDE.md After Each Task
-- After completing each task, update this file's "Implementation Status" section below.
-- Add any new files created, exports available, key types/interfaces, and important patterns.
-- This ensures subsequent tasks (even in new sessions) have full context of what exists.
+- [token-efficiency.md](.claude/rules/token-efficiency.md)
+- [modularization.md](.claude/rules/modularization.md)
+- [ux.md](.claude/rules/ux.md)
+- [no-placeholders.md](.claude/rules/no-placeholders.md)
+- [update-claude-md.md](.claude/rules/update-claude-md.md)
 
 ## Tech Stack
 
