@@ -3,14 +3,14 @@
 import { useEffect, useState, useCallback } from 'react';
 
 export function useServiceWorker() {
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(() =>
+    typeof window !== 'undefined' ? navigator.onLine : true
+  );
   const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
   const [hasUpdate, setHasUpdate] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
-    setIsOnline(navigator.onLine);
 
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);

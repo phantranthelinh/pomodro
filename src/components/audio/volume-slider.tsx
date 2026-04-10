@@ -29,7 +29,10 @@ export function VolumeSlider({ value, onChange, disabled, label }: VolumeSliderP
         min={0}
         max={100}
         disabled={disabled}
-        onValueChange={([v]) => onChange(v / 100)}
+        onValueChange={(val) => {
+          const v = Array.isArray(val) ? (val as number[])[0] : (val as number);
+          onChange(v / 100);
+        }}
         className="flex-1"
         aria-label={label ? `${label} volume` : 'Volume'}
       />

@@ -1,7 +1,7 @@
 ---
 phase: 3
 task: 6
-status: pending
+status: done
 ---
 
 # Task 6: TimerControls Component

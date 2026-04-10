@@ -1,7 +1,7 @@
 ---
 phase: 3
 task: 4
-status: blocked
+status: done
 ---
 
 # Task 4: NavBar Component

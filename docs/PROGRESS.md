@@ -2,7 +2,7 @@
 
 > Update this file after completing each task. New sessions should read this first.
 
-## Current Status: PHASE 3 IN PROGRESS
+## Current Status: PHASE 4 IN PROGRESS
 
 ## Completed
 - [x] Design spec approved (docs/superpowers/specs/2026-04-09-pomodro-design.md)
@@ -20,12 +20,18 @@
   - Zustand stores: timer-store, audio-store, ui-store
   - Hooks: useTimer, useAudioMixer, useNotification, useServiceWorker
   - tRPC routers: timer, sound, user, friend, leaderboard — all merged into appRouter
+- [x] **Phase 3: Atomic Components** — all 14 tasks complete (2026-04-10)
+  - shadcn/ui base-nova + glassmorphism customization (glass-card, button, slider)
+  - NavBar with NextAuth session, next/image avatars
+  - Timer: TimerDisplay (SVG ring), TimerControls, PresetSelector
+  - Audio: SoundToggle, VolumeSlider, MixerPanel (expandable mixer)
+  - Social: StatsCard, HistoryChart (CSS bar chart), LeaderboardTable (rank badges)
+  - Build: clean TypeScript compile, 0 ESLint errors
 
 ## In Progress
-- [ ] Phase 3: Atomic Components (timer, audio, social, ui)
+- [ ] Phase 4: Integration & PWA (pages, SW, offline, notifications)
 
 ## Not Started
-- [ ] Phase 3: Atomic Components (timer, audio, social, ui)
 - [ ] Phase 4: Integration & PWA (pages, SW, offline, notifications)
 
 ## Key Files

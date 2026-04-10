@@ -1,13 +1,13 @@
 ---
 phase: 3
 task: 11
-status: in-progress
+status: done
 ---
 
 # Task 11: StatsCard Component
 
 **Phase:** 3 — Atomic Components
-**Status:** in-progress
+**Status:** done
 
 ## Files
 

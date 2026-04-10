@@ -1,7 +1,7 @@
 ---
 phase: 3
 task: 8
-status: pending
+status: done
 ---
 
 # Task 8: SoundToggle Component

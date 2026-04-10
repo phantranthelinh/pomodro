@@ -1,13 +1,13 @@
 ---
 phase: 3
 task: 13
-status: blocked
+status: done
 ---
 
 # Task 13: LeaderboardTable Component
 
 **Phase:** 3 — Atomic Components
-**Status:** in-progress
+**Status:** done
 
 ## Files
 

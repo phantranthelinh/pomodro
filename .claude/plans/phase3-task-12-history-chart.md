@@ -1,13 +1,13 @@
 ---
 phase: 3
 task: 12
-status: blocked
+status: done
 ---
 
 # Task 12: HistoryChart Component
 
 **Phase:** 3 — Atomic Components
-**Status:** in-progress
+**Status:** done
 
 ## Files
 

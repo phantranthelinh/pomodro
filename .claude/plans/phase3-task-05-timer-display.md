@@ -1,7 +1,7 @@
 ---
 phase: 3
 task: 5
-status: pending
+status: done
 ---
 
 # Task 5: TimerDisplay Component
