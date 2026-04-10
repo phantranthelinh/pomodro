@@ -94,6 +94,10 @@ Pomodro — a Pomodoro Timer web app with multi-channel ambient audio mixer, Gla
 - `src/server/routers/friend.ts` — tRPC friend router (sendRequest, respond, list, pending)
 - `src/server/routers/leaderboard.ts` — tRPC leaderboard router (weekly+friendsOnly, monthly, allTime)
 - `src/server/routers/root.ts` — appRouter merging all 5 routers
+- `src/components/social/stats-card.tsx` — StatsCard (Server Component, props: todaySessions/todayFocusSec/streak/totalSessions)
+- `src/components/social/history-chart.tsx` — HistoryChart (Server Component, CSS bar chart, props: data DayData[]/label)
+- `src/components/social/leaderboard-table.tsx` — LeaderboardTable (Server Component, rank badges/avatars/focus hours, props: entries/currentUserId)
+- `src/app/globals.css` — Added rank color tokens: `--color-rank-gold`, `--color-rank-silver`, `--color-rank-bronze` to @theme block
 
 ### Available Exports
 - `prisma` from `@/lib/prisma` — Prisma client singleton

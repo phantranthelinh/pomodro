@@ -134,7 +134,7 @@ status: pending
 
 ## Create Feature Branch
 
-After creating all task plan files, before writing any code:
+After creating all task plan files, before writing any code. **Do not ask the user for confirmation — proceed immediately.**
 
 ```bash
 cd c:\sub_workspace\pomodro
@@ -266,7 +266,7 @@ Do both before moving to the next task:
 
 ### Step 8 — Loop
 
-Continue to the next `pending` task immediately.
+Continue to the next `pending` task immediately. Do not pause to ask the user between tasks.
 
 ---
 
