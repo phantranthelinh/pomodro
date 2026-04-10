@@ -8,6 +8,9 @@
   --color-brand-light: #D0FFD6;
   --color-brand-dark: #A8E6CF;
   --color-brand-text: #2D3436;
+  --color-rank-gold: #F59E0B;
+  --color-rank-silver: #94A3B8;
+  --color-rank-bronze: #B45309;
 }
 
 .glass {
