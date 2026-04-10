@@ -61,7 +61,7 @@ Pomodro — a Pomodoro Timer web app with multi-channel ambient audio mixer, Gla
 
 > **Update this section after each completed task.** New sessions read this to know what exists.
 
-### Current Phase: Phase 2 — Core Logic (Phase 1 complete, Phase 2 starting)
+### Current Phase: Phase 3 — Atomic Components (Phase 2 complete)
 
 ### Completed Files
 - `package.json` — Next.js 15, TypeScript, Tailwind CSS, ESLint, Turbopack
@@ -81,24 +81,44 @@ Pomodro — a Pomodoro Timer web app with multi-channel ambient audio mixer, Gla
 - `src/lib/prisma.ts` — Prisma singleton using PrismaPg driver adapter
 - `.env.example` — env template (DATABASE_URL, AUTH_SECRET, OAuth credentials)
 
+- `src/stores/timer-store.ts` — Zustand timer store (phase, secondsLeft, preset, session tracking)
+- `src/stores/audio-store.ts` — Zustand audio store (channels map, global volume, playing state)
+- `src/stores/ui-store.ts` — Zustand UI store (activePanel, modals, sidebar)
+- `src/hooks/use-timer.ts` — useTimer hook (interval tick, auto-switch, session save via tRPC)
+- `src/hooks/use-audio-mixer.ts` — useAudioMixer hook (Howler.js multi-channel, lazy init)
+- `src/hooks/use-notification.ts` — useNotification hook (browser notifications + sound alert)
+- `src/hooks/use-service-worker.ts` — useServiceWorker hook (SW registration, offline, update)
+- `src/server/routers/timer.ts` — tRPC timer router (complete, history, stats)
+- `src/server/routers/sound.ts` — tRPC sound router (saveMix, getMixes, deleteMix, setDefault)
+- `src/server/routers/user.ts` — tRPC user router (profile, updateProfile)
+- `src/server/routers/friend.ts` — tRPC friend router (sendRequest, respond, list, pending)
+- `src/server/routers/leaderboard.ts` — tRPC leaderboard router (weekly+friendsOnly, monthly, allTime)
+- `src/server/routers/root.ts` — appRouter merging all 5 routers
+
 ### Available Exports
-- `prisma` from `@/lib/prisma` — Prisma 7 client singleton (PrismaPg adapter)
+- `prisma` from `@/lib/prisma` — Prisma client singleton
 - `Providers` from `@/app/providers` — client provider wrapper
 - `SOUND_CATALOG`, `AMBIENT_SOUNDS`, `LOFI_SOUNDS` from `@/lib/sounds`
 - `TIMER_PRESETS` from `@/lib/presets` — Record keyed by PresetKey
+- `useTimerStore` from `@/stores/timer-store`
+- `useAudioStore` from `@/stores/audio-store`
+- `useUIStore` from `@/stores/ui-store`
+- `useTimer` from `@/hooks/use-timer`
+- `useAudioMixer` from `@/hooks/use-audio-mixer`
+- `useNotification` from `@/hooks/use-notification`
+- `useServiceWorker` from `@/hooks/use-service-worker`
+- `appRouter`, `AppRouter` from `@/server/routers/root`
 
 ### Key Types
 - `SoundCategory` — `'ambient' | 'lofi'`
 - `SoundDefinition` — `{ id, label, category, src }`
 - `PresetKey` — `'pomodoro' | 'deepwork' | 'quick' | 'custom'`
 - `TimerPreset` — `{ key, label, focusMinutes, shortBreakMinutes, longBreakMinutes, rounds }`
+- `TimerPhase` — `'focus' | 'shortBreak' | 'longBreak'` (in timer-store)
+- `AudioChannel` — `{ soundKey, volume, enabled }` (in audio-store)
+- `LeaderboardEntry` — `{ rank, userId, name, image, totalSec, sessions }` (in leaderboard router)
 
-### Key Types
-- Prisma model types auto-generated to `src/generated/prisma/client` (gitignored, rebuilt via postinstall)
-- `PrismaClient` imported from `@/generated/prisma/client`
-
-### Prisma 7 Notes
-- Uses `prisma-client` generator (not legacy `prisma-client-js`)
-- Requires `@prisma/adapter-pg` + `pg` driver — no direct env connection string on client
-- Generated client output: `src/generated/prisma/` (gitignored)
-- `postinstall` + `build` scripts auto-run `prisma generate`
+### Prisma Notes
+- `PrismaClient` from `@prisma/client` (schema uses `prisma-client-js` provider)
+- Friendship model: `userId` (sender) + `friendId` (receiver) + `status: 'pending'|'accepted'`
+- friend router maintains bidirectional accepted rows in a single `$transaction`

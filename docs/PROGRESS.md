@@ -2,7 +2,7 @@
 
 > Update this file after completing each task. New sessions should read this first.
 
-## Current Status: PHASE 2 IN PROGRESS
+## Current Status: PHASE 3 IN PROGRESS
 
 ## Completed
 - [x] Design spec approved (docs/superpowers/specs/2026-04-09-pomodro-design.md)
@@ -16,9 +16,13 @@
   - Root layout with Providers (tRPC + React Query + NextAuth)
   - Sound catalog (`src/lib/sounds.ts`) — 5 ambient + 3 lo-fi channels
   - Timer presets (`src/lib/presets.ts`) — Pomodoro, Deep Work, Quick, Custom
+- [x] **Phase 2: Core Logic** — all 14 tasks complete (2026-04-10)
+  - Zustand stores: timer-store, audio-store, ui-store
+  - Hooks: useTimer, useAudioMixer, useNotification, useServiceWorker
+  - tRPC routers: timer, sound, user, friend, leaderboard — all merged into appRouter
 
 ## In Progress
-- [ ] Phase 2: Core Logic (Zustand stores, hooks, tRPC routers)
+- [ ] Phase 3: Atomic Components (timer, audio, social, ui)
 
 ## Not Started
 - [ ] Phase 3: Atomic Components (timer, audio, social, ui)
