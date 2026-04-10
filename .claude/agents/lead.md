@@ -99,116 +99,26 @@ When in doubt, use `sonnet`.
 
 ## Step 4 — Dispatch Implementation Sub-Agent
 
-For each task, spawn a general-purpose agent with:
-- The exact task description and files to create/modify
-- The relevant section from the plan (copy the steps verbatim)
-- The branch to work on
-- Rules from `.claude/rules/` that apply
-- Instruction to call research agent if they hit an unknown API or library
+Spawn a general-purpose sub-agent per task with the exact steps, files, branch, and applicable rules. See `.claude/skills/references/agent-dispatch-templates.md` for the full prompt template.
 
-```
-Agent(
-  description: "Implement [task name]",
-  model: "[haiku|sonnet|opus]",
-  prompt: """
-  You are implementing [task name] for the Pomodro project.
-  Working directory: c:\\sub_workspace\\pomodro
-  Branch: feat/[branch-name]
-  
-  ## Task
-  [Copy exact task steps from the plan]
-  
-  ## Rules (mandatory)
-  - Single quotes, 2-space indent, semicolons, 100-char line width
-  - type over interface for all TypeScript
-  - No placeholders — every function must be complete and working
-  - Audio/timer logic in hooks or stores, never in components
-  - Only modify files listed in this task
-  
-  ## If you hit an unknown library or API
-  Stop and report: "NEED RESEARCH: [specific question]"
-  Do NOT guess or hallucinate APIs.
-  
-  ## Done when
-  All files created/modified as specified. No TODOs, no placeholders.
-  Report: "TASK COMPLETE: [list of files changed]"
-  """
-)
-```
+**Model selection:**
+
+| Complexity | Criteria | Model |
+|---|---|---|
+| Simple | Config, boilerplate, env setup | `haiku` |
+| Standard | Components, stores, API routes, hooks | `sonnet` |
+| Complex | Architecture decisions, multi-system integration | `opus` |
 
 ## Step 5 — Handle Research Requests
 
-If a sub-agent reports "NEED RESEARCH: [question]", dispatch the research agent before continuing:
-
-```
-Agent(
-  description: "Research [topic]",
-  subagent_type: "research",
-  model: "sonnet",
-  prompt: """
-  [Paste the research question from the sub-agent]
-  Return a concise summary (under 300 words) with exact API signatures, correct import paths, and working code examples. Focus only on what is needed to unblock the implementation task.
-  """
-)
-```
-
-Pass the research summary back to the implementation sub-agent by re-dispatching with the research results included.
+If a sub-agent reports `NEED RESEARCH: [question]`, dispatch the research agent (see templates ref), then re-dispatch the implementation sub-agent with the research results included.
 
 ## Step 6 — Reviewer Gate (MANDATORY before every commit)
 
-After each task's sub-agent completes, ALWAYS dispatch the reviewer agent before committing:
-
-```
-Agent(
-  description: "Review [task name] changes",
-  subagent_type: "reviewer",
-  model: "sonnet",
-  prompt: """
-  Review the following changed files for the Pomodro project before committing.
-  Working directory: c:\\sub_workspace\\pomodro
-  
-  Files changed: [list from sub-agent report]
-  Task context: [task name and purpose]
-  
-  Check for:
-  1. Next.js App Router best practices (Vercel docs)
-  2. Project rules (type over interface, no placeholders, modularization)
-  3. Code correctness and completeness
-  4. Security issues
-  
-  Output: APPROVED or NEEDS FIXES: [specific issues]
-  """
-)
-```
+After each task, dispatch the reviewer agent (see templates ref).
 
 - **APPROVED** → proceed to commit
-- **NEEDS FIXES** → dispatch the fixer agent (see below), then re-dispatch reviewer
-
-### Fixer Dispatch (on NEEDS FIXES)
-
-```
-Agent(
-  description: "Fix review issues for [task name]",
-  subagent_type: "fixer",
-  model: "sonnet",
-  prompt: """
-  Fix the following issues found by the reviewer for the Pomodro project.
-  Working directory: c:\\sub_workspace\\pomodro
-
-  NEEDS FIXES report:
-  [paste full NEEDS FIXES list]
-
-  Task context: [task name and files]
-
-  Rules:
-  - Edit, never rewrite — targeted fixes only
-  - Only fix what was flagged — do not touch other code
-  - Report: FIXES APPLIED: [file:line — what was fixed]
-  """
-)
-```
-
-After fixer reports `FIXES APPLIED`, re-dispatch the reviewer (Step 6). Repeat until `APPROVED`.
+- **NEEDS FIXES** → dispatch fixer agent (see templates ref), then re-dispatch reviewer. Repeat until `APPROVED`.
 
 ## Step 7 — Commit
 
