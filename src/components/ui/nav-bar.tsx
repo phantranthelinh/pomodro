@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { Timer, BarChart3, Trophy, LogIn, LogOut, User } from 'lucide-react';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -50,11 +51,12 @@ export function NavBar() {
         {session?.user ? (
           <div className="flex items-center gap-2">
             {session.user.image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={session.user.image}
                 alt={session.user.name ?? ''}
-                className="w-8 h-8 rounded-full"
+                width={32}
+                height={32}
+                className="rounded-full"
               />
             ) : (
               <User size={20} className="text-brand-text/60" />
