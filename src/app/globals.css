@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-light: #D0FFD6;
+  --color-brand-dark: #A8E6CF;
+  --color-brand-text: #2D3436;
+}
+
+.glass {
+  background: rgba(208, 255, 214, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(208, 255, 214, 0.25);
+  border-radius: 1rem;
+}
+
+.glass-strong {
+  background: rgba(208, 255, 214, 0.3);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(208, 255, 214, 0.4);
+  border-radius: 1rem;
+}

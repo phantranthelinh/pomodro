@@ -61,13 +61,44 @@ Pomodro — a Pomodoro Timer web app with multi-channel ambient audio mixer, Gla
 
 > **Update this section after each completed task.** New sessions read this to know what exists.
 
-### Current Phase: NOT STARTED — Ready for Phase 1
+### Current Phase: Phase 2 — Core Logic (Phase 1 complete, Phase 2 starting)
 
 ### Completed Files
-_(none yet — update as tasks are completed)_
+- `package.json` — Next.js 15, TypeScript, Tailwind CSS, ESLint, Turbopack
+- `next.config.ts` — empty NextConfig
+- `tsconfig.json` — strict TypeScript with `@/*` alias
+- `src/app/layout.tsx` — root layout with Providers (tRPC + React Query + NextAuth SessionProvider), brand bg
+- `src/app/providers.tsx` — client Providers component wrapping tRPC, QueryClient, SessionProvider
+- `src/app/page.tsx` — glassmorphism verification page (will be replaced in Phase 3)
+- `src/app/globals.css` — Tailwind v4 brand theme (@theme) + .glass/.glass-strong utilities
+- `.gitignore` — standard Next.js ignores
+- `public/sounds/ambient/` — placeholder dir for ambient audio files
+- `public/sounds/lofi/` — placeholder dir for lo-fi audio files
+- `public/icons/` — placeholder dir for PWA icons
+
+- `prisma/schema.prisma` — full DB schema (User, Account, Session, VerificationToken, TimerSession, SoundMix, SoundChannel, Friendship)
+- `prisma.config.ts` — Prisma 7 config (datasource URL via env, dotenv/config)
+- `src/lib/prisma.ts` — Prisma singleton using PrismaPg driver adapter
+- `.env.example` — env template (DATABASE_URL, AUTH_SECRET, OAuth credentials)
 
 ### Available Exports
-_(none yet)_
+- `prisma` from `@/lib/prisma` — Prisma 7 client singleton (PrismaPg adapter)
+- `Providers` from `@/app/providers` — client provider wrapper
+- `SOUND_CATALOG`, `AMBIENT_SOUNDS`, `LOFI_SOUNDS` from `@/lib/sounds`
+- `TIMER_PRESETS` from `@/lib/presets` — Record keyed by PresetKey
 
 ### Key Types
-_(none yet)_
+- `SoundCategory` — `'ambient' | 'lofi'`
+- `SoundDefinition` — `{ id, label, category, src }`
+- `PresetKey` — `'pomodoro' | 'deepwork' | 'quick' | 'custom'`
+- `TimerPreset` — `{ key, label, focusMinutes, shortBreakMinutes, longBreakMinutes, rounds }`
+
+### Key Types
+- Prisma model types auto-generated to `src/generated/prisma/client` (gitignored, rebuilt via postinstall)
+- `PrismaClient` imported from `@/generated/prisma/client`
+
+### Prisma 7 Notes
+- Uses `prisma-client` generator (not legacy `prisma-client-js`)
+- Requires `@prisma/adapter-pg` + `pg` driver — no direct env connection string on client
+- Generated client output: `src/generated/prisma/` (gitignored)
+- `postinstall` + `build` scripts auto-run `prisma generate`
