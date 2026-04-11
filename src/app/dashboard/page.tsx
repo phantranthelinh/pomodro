@@ -83,7 +83,7 @@ function DashboardContent() {
 
 type SessionItem = {
   id: string;
-  completedAt: Date;
+  completedAt: Date | string;
   totalFocusSec: number;
 };
 

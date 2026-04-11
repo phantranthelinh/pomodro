@@ -38,13 +38,17 @@ Next.js 15 · tRPC · Zustand · Howler.js · Prisma + PostgreSQL · NextAuth.js
 
 > **Update after each task.**
 
-### Phase 3 — Atomic Components (Phase 2 complete)
+### Phase 4 — Integration & PWA (in progress)
 
 ### Completed (by layer)
 
 **Foundation:** `package.json`, `next.config.ts`, `tsconfig.json`, `.gitignore`, `.env.example`
 
-**App shell:** `src/app/layout.tsx`, `src/app/providers.tsx`, `src/app/page.tsx`, `src/app/globals.css` (Tailwind v4 @theme, .glass/.glass-strong, rank color tokens)
+**App shell:** `src/app/layout.tsx`, `src/app/providers.tsx`, `src/app/globals.css` (Tailwind v4 @theme, .glass/.glass-strong, rank color tokens)
+
+**Pages (Phase 4):** `src/app/page.tsx` — main timer page (TimerDisplay + TimerControls + PresetSelector + MixerPanel + StatsCard, wired with useTimer + useNotification + trpc.timer.stats)
+
+**PWA (Phase 4):** `public/manifest.json`, `public/icons/icon-192.png`, `public/icons/icon-512.png`, `next.config.ts` (withPWA: CacheFirst sounds, NetworkFirst tRPC, StaleWhileRevalidate images)
 
 **Database:** `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/prisma.ts`
 
