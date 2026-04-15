@@ -1,6 +1,5 @@
 # 🐭 JerryPomo: Focus with Aura
 
-![JerryPomo Hero Mockup](public/hero.png)
 
 A premium, interactive Pomodoro timer designed for modern focus. **JerryPomo** transforms the standard focus timer into an emotionally engaging experience featuring a living mascot, premium aesthetic, and intelligent tracking.
 
