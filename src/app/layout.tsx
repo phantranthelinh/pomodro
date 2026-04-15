@@ -22,13 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geist.variable} h-full antialiased`}>
-      <body
-        className="min-h-full flex flex-col text-brand-text"
-        style={{
-          background:
-            "linear-gradient(135deg, #D0FFD6 0%, #E8FFE8 50%, #D0FFD6 100%)",
-        }}
-      >
+      <body className="min-h-full flex flex-col bg-[#F8F9FA] text-foreground transition-colors duration-500">
         <Providers>
           <NavBar />
           {children}

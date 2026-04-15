@@ -11,7 +11,7 @@ export function GlassCard({ children, className, variant = 'default' }: GlassCar
     <div
       className={cn(
         variant === 'strong' ? 'glass-strong' : 'glass',
-        'shadow-lg p-6',
+        'p-6 transition-all duration-300 ease-out',
         className
       )}
     >
