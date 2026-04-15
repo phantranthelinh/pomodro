@@ -112,4 +112,40 @@ export const timerRouter = router({
       streak,
     };
   }),
+
+  dailyChart: protectedProcedure
+    .input(z.object({ days: z.number().int().min(1).max(90).default(7) }))
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.user.id!;
+      const now = new Date();
+
+      // Build array of last N days (oldest → newest)
+      const result: Array<{ date: string; sessions: number; totalSec: number }> = [];
+
+      for (let i = input.days - 1; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+        const dayStart = new Date(d);
+        const dayEnd = new Date(d);
+        dayEnd.setDate(dayEnd.getDate() + 1);
+
+        const agg = await ctx.prisma.timerSession.aggregate({
+          where: { userId, completedAt: { gte: dayStart, lt: dayEnd } },
+          _sum: { totalFocusSec: true },
+          _count: true,
+        });
+
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+
+        result.push({
+          date: `${y}-${m}-${day}`,
+          sessions: agg._count,
+          totalSec: agg._sum.totalFocusSec ?? 0,
+        });
+      }
+
+      return result;
+    }),
 });
+
