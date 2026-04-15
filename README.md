@@ -15,7 +15,7 @@ A premium, interactive Pomodoro timer designed for modern focus. **JerryPomo** t
 
 ## 🛠️ Technology Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **State Management**: Zustand (Client) + tRPC (API)
 - **Database**: Prisma + PostgreSQL (Supabase/Local)
 - **Animations**: Framer Motion + CSS Transitions
