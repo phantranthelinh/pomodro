@@ -31,13 +31,6 @@ const modeColors: Record<TimerMode, string> = {
   idle: 'text-brand-text/60',
 };
 
-const ringColors: Record<TimerMode, string> = {
-  focus: 'var(--color-brand-text)',
-  break: 'var(--color-brand-dark)',
-  longBreak: 'var(--color-brand-dark)',
-  idle: 'rgba(208, 255, 214, 0.3)',
-};
-
 export function TimerDisplay({
   remainingSeconds,
   totalSeconds,
@@ -45,58 +38,25 @@ export function TimerDisplay({
   currentRound,
   maxRounds,
 }: TimerDisplayProps) {
-  const progress = totalSeconds > 0 ? (totalSeconds - remainingSeconds) / totalSeconds : 0;
-  const circumference = 2 * Math.PI * 120;
-  const strokeDashoffset = circumference * (1 - progress);
-
   return (
-    <GlassCard variant="strong" className="flex flex-col items-center py-8">
-      <p className={cn('text-sm font-medium mb-4', modeColors[mode])}>
-        {modeLabels[mode]}
-      </p>
-
-      <div className="relative w-64 h-64 flex items-center justify-center">
-        <svg className="absolute inset-0 -rotate-90" viewBox="0 0 256 256">
-          <circle
-            cx="128"
-            cy="128"
-            r="120"
-            fill="none"
-            stroke="rgba(208, 255, 214, 0.3)"
-            strokeWidth="6"
-          />
-          <circle
-            cx="128"
-            cy="128"
-            r="120"
-            fill="none"
-            stroke={ringColors[mode]}
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            className="transition-all duration-1000 ease-linear"
-          />
-        </svg>
-
-        <div className="text-center z-10">
-          <span className={cn('text-5xl font-mono font-bold', modeColors[mode])}>
-            {formatTime(remainingSeconds)}
-          </span>
-        </div>
+    <div className="flex flex-col items-center py-4 relative bg-black/5 rounded-3xl mx-auto w-full max-w-sm backdrop-blur-sm">
+      <div className="text-center z-10 flex flex-col items-center justify-center">
+        <span className="text-5xl font-sans font-black tracking-tight text-black/90 leading-none transition-all duration-300">
+          {formatTime(remainingSeconds)}
+        </span>
       </div>
 
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2 mt-4 bg-white/40 px-4 py-2 rounded-full shadow-sm backdrop-blur-sm">
         {Array.from({ length: maxRounds }, (_, i) => (
           <div
             key={i}
             className={cn(
-              'w-2.5 h-2.5 rounded-full transition-colors',
-              i < currentRound ? 'bg-brand-dark' : 'bg-brand-dark/20'
+              'w-2 h-2 rounded-full transition-colors',
+              i < currentRound ? 'bg-black/90' : 'bg-black/20'
             )}
           />
         ))}
       </div>
-    </GlassCard>
+    </div>
   );
 }
