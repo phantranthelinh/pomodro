@@ -2,11 +2,15 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import { useTimerStore } from '@/stores/timer-store';
+import { useTrackingStore } from '@/stores/tracking-store';
 import { TIMER_PRESETS } from '@/lib/presets';
 import { trpc } from '@/lib/trpc-client';
+import { useSession } from 'next-auth/react';
 
 export function useTimer() {
   const store = useTimerStore();
+  const { data: session } = useSession();
+  const recordSession = useTrackingStore((s) => s.recordSession);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const completeMutation = trpc.timer.complete.useMutation();
   const completeMutateRef = useRef(completeMutation.mutate);
@@ -40,26 +44,32 @@ export function useTimer() {
     if (store.remainingSeconds === 0 && store.mode !== 'idle') {
       const state = useTimerStore.getState();
 
-      // Save completed focus session to server
+      // Save completed focus session
       if (state.mode === 'focus') {
-        const breakMin =
-          state.preset === 'custom'
-            ? state.customConfig.breakMin
-            : TIMER_PRESETS[state.preset].shortBreakMinutes;
+        // Always record locally (works for guests too)
+        recordSession(state.totalSeconds);
 
-        completeMutateRef.current({
-          preset: state.preset,
-          focusMin: Math.round(state.totalSeconds / 60),
-          breakMin,
-          rounds: state.currentRound,
-          totalFocusSec: state.totalSeconds,
-        });
+        // Also persist to server if authenticated
+        if (session?.user) {
+          const breakMin =
+            state.preset === 'custom'
+              ? state.customConfig.breakMin
+              : TIMER_PRESETS[state.preset].shortBreakMinutes;
+
+          completeMutateRef.current({
+            preset: state.preset,
+            focusMin: Math.round(state.totalSeconds / 60),
+            breakMin,
+            rounds: state.currentRound,
+            totalFocusSec: state.totalSeconds,
+          });
+        }
       }
 
       // Switch to next mode
       state.switchToNextMode();
     }
-  }, [store.remainingSeconds, store.mode]);
+  }, [store.remainingSeconds, store.mode, session, recordSession]);
 
   return {
     mode: store.mode,
