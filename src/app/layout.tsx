@@ -10,7 +10,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Pomodro — Focus Timer with Ambient Sounds",
+  title: "JeFocus — Focus Timer with Ambient Sounds",
   description: "A Pomodoro timer with multi-channel ambient audio mixer",
   manifest: "/manifest.json",
 };

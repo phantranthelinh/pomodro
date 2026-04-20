@@ -1,5 +1,10 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import { Settings } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { GlassCard } from '@/components/ui/glass-card';
+import { useTimerStore } from '@/stores/timer-store';
 
 type TimerMode = 'focus' | 'break' | 'longBreak' | 'idle';
 
@@ -17,46 +22,190 @@ function formatTime(seconds: number): string {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
-const modeLabels: Record<TimerMode, string> = {
-  focus: 'Focus',
-  break: 'Break',
-  longBreak: 'Long Break',
-  idle: 'Ready',
-};
-
-const modeColors: Record<TimerMode, string> = {
-  focus: 'text-brand-text',
-  break: 'text-brand-dark',
-  longBreak: 'text-brand-dark/80',
-  idle: 'text-brand-text/60',
-};
+const SLIDER_STEPS = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
 
 export function TimerDisplay({
   remainingSeconds,
-  totalSeconds,
   mode,
   currentRound,
   maxRounds,
 }: TimerDisplayProps) {
+  const [open, setOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const customConfig = useTimerStore((s) => s.customConfig);
+  const setCustomConfig = useTimerStore((s) => s.setCustomConfig);
+  const isRunning = useTimerStore((s) => s.isRunning);
+
+  // Input state — kept local so user can type freely before committing
+  const [inputVal, setInputVal] = useState(String(customConfig.focusMin));
+
+  // Sync input when config changes externally (e.g. slider)
+  useEffect(() => {
+    setInputVal(String(customConfig.focusMin));
+  }, [customConfig.focusMin]);
+
+  // Close panel on outside click
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent) {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
+  function clampMinutes(v: number) {
+    return Math.min(120, Math.max(15, isNaN(v) ? 15 : v));
+  }
+
+  function applyMinutes(mins: number) {
+    const clamped = clampMinutes(mins);
+    setCustomConfig({ ...customConfig, focusMin: clamped });
+  }
+
+  // Slider value → nearest step index
+  const currentStep = SLIDER_STEPS.indexOf(customConfig.focusMin);
+  const sliderValue = currentStep !== -1 ? currentStep : (() => {
+    // If value is outside steps (direct input), find nearest
+    let nearest = 0;
+    let minDiff = Infinity;
+    SLIDER_STEPS.forEach((v, i) => {
+      const diff = Math.abs(v - customConfig.focusMin);
+      if (diff < minDiff) { minDiff = diff; nearest = i; }
+    });
+    return nearest;
+  })();
+
   return (
-    <div className="flex flex-col items-center py-4 relative bg-black/5 rounded-3xl mx-auto w-full max-w-sm backdrop-blur-sm">
-      <div className="text-center z-10 flex flex-col items-center justify-center">
+    <div ref={panelRef} className="relative flex flex-col items-center py-3 bg-black/5 rounded-3xl mx-auto w-full max-w-sm backdrop-blur-sm">
+      {/* Timer row: time + settings icon */}
+      <div className="relative flex items-center justify-center gap-3 z-10">
         <span className="text-5xl font-sans font-black tracking-tight text-black/90 leading-none transition-all duration-300">
           {formatTime(remainingSeconds)}
         </span>
+
+        {/* Settings icon — only show when idle */}
+        {mode === 'idle' && (
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Chỉnh thời gian"
+            className={cn(
+              'p-1.5 rounded-full transition-all duration-200',
+              open
+                ? 'bg-black text-white rotate-45'
+                : 'text-black/30 hover:text-black/70 hover:bg-black/10'
+            )}
+          >
+            <Settings size={18} strokeWidth={2.2} className="transition-transform duration-200" />
+          </button>
+        )}
       </div>
 
-      <div className="flex gap-2 mt-4 bg-white/40 px-4 py-2 rounded-full shadow-sm backdrop-blur-sm">
-        {Array.from({ length: maxRounds }, (_, i) => (
-          <div
-            key={i}
-            className={cn(
-              'w-2 h-2 rounded-full transition-colors',
-              i < currentRound ? 'bg-black/90' : 'bg-black/20'
-            )}
-          />
-        ))}
-      </div>
+      {/* Inline settings panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.97 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="mt-4 w-full px-5"
+          >
+            <div className="bg-white/80 backdrop-blur-md border border-black/8 rounded-2xl px-5 py-4 shadow-lg space-y-4">
+              {/* Slider step display */}
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-semibold text-black/40 uppercase tracking-wider">Thời gian focus</span>
+                {/* Direct number input */}
+                <div className="flex items-center gap-1">
+                  <input
+                    type="number"
+                    min={15}
+                    max={120}
+                    disabled={isRunning}
+                    value={inputVal}
+                    onChange={(e) => setInputVal(e.target.value)}
+                    onBlur={() => {
+                      const parsed = parseInt(inputVal, 10);
+                      applyMinutes(parsed);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        const parsed = parseInt(inputVal, 10);
+                        applyMinutes(parsed);
+                        (e.target as HTMLInputElement).blur();
+                      }
+                    }}
+                    className={cn(
+                      'w-12 text-right text-base font-black text-black/90 bg-transparent outline-none',
+                      '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
+                    )}
+                  />
+                  <span className="text-sm font-semibold text-black/40">phút</span>
+                </div>
+              </div>
+
+              {/* Slider */}
+              <div className="relative w-full select-none">
+                {/* Track */}
+                <div className="relative h-2 rounded-full bg-black/10 overflow-hidden">
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full bg-black/80 transition-all duration-150"
+                    style={{ width: `${(sliderValue / (SLIDER_STEPS.length - 1)) * 100}%` }}
+                  />
+                </div>
+
+                {/* Native range input laid on top */}
+                <input
+                  type="range"
+                  min={0}
+                  max={SLIDER_STEPS.length - 1}
+                  step={1}
+                  value={sliderValue}
+                  disabled={isRunning}
+                  onChange={(e) => {
+                    const idx = parseInt(e.target.value, 10);
+                    applyMinutes(SLIDER_STEPS[idx]);
+                  }}
+                  className="absolute inset-0 w-full opacity-0 cursor-pointer h-full"
+                />
+
+                {/* Step dots */}
+                <div className="flex justify-between mt-2 px-0">
+                  {SLIDER_STEPS.map((v, i) => (
+                    <button
+                      key={v}
+                      disabled={isRunning}
+                      onClick={() => applyMinutes(v)}
+                      className={cn(
+                        'flex flex-col items-center gap-0.5 group',
+                        isRunning && 'cursor-not-allowed'
+                      )}
+                    >
+                      <div className={cn(
+                        'w-1 h-1 rounded-full transition-colors',
+                        i <= sliderValue ? 'bg-black/80' : 'bg-black/20',
+                        !isRunning && 'group-hover:bg-black/50'
+                      )} />
+                      {(i === 0 || i === SLIDER_STEPS.length - 1 || v === 25 || v === 45) && (
+                        <span className={cn(
+                          'text-[9px] font-semibold transition-colors',
+                          i <= sliderValue ? 'text-black/60' : 'text-black/25'
+                        )}>
+                          {v}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }

@@ -1,4 +1,4 @@
-# Pomodro — Progress Tracker
+# JeFocus — Progress Tracker
 
 > Update this file after completing each task. New sessions should read this first.
 
@@ -46,7 +46,7 @@
 - [ ] Deploy to Vercel
 
 ## Key Files
-- Spec: `docs/superpowers/specs/2026-04-09-pomodro-design.md`
+- Spec: `docs/superpowers/specs/2026-04-09-jefocus-design.md`
 - Rules: `CLAUDE.md`
 - Plans:
   - `docs/superpowers/plans/2026-04-09-phase1-foundation.md` (10 tasks — DONE)

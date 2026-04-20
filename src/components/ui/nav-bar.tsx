@@ -26,7 +26,7 @@ export function NavBar() {
   return (
     <nav className="glass sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
       <Link href="/" className="text-xl font-bold text-brand-text">
-        Pomodro
+        JeFocus
       </Link>
 
       <div className="flex items-center gap-1">

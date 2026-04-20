@@ -1,4 +1,4 @@
-# Pomodro — Design Spec
+# JeFocus — Design Spec
 
 **Date:** 2026-04-09
 **Status:** Approved
@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-Pomodro is a Pomodoro Timer web app with:
+JeFocus is a Pomodoro Timer web app with:
 - Multi-channel ambient audio mixer (ambient nature sounds + lo-fi beats)
 - Glassmorphism UI with brand color #D0FFD6
 - Social features: stats, history, friend leaderboard
@@ -32,7 +32,7 @@ Pomodro is a Pomodoro Timer web app with:
 ## 3. Architecture & Folder Structure
 
 ```
-c:\sub_workspace\pomodro\
+c:\sub_workspace\jefocus\
 ├── prisma/
 │   └── schema.prisma
 ├── public/

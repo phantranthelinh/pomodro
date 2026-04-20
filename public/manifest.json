@@ -1,6 +1,6 @@
 {
-  "name": "Pomodro",
-  "short_name": "Pomodro",
+  "name": "JeFocus",
+  "short_name": "JeFocus",
   "description": "Focus timer with ambient audio mixer",
   "start_url": "/",
   "display": "standalone",

@@ -53,11 +53,11 @@ function getSecondsForMode(mode: TimerMode, config: TimerConfig): number {
 
 export const useTimerStore = create<TimerState & TimerActions>()((set, get) => ({
   mode: 'idle',
-  preset: 'pomodoro',
-  totalSeconds: TIMER_PRESETS.pomodoro.focusMinutes * 60,
-  remainingSeconds: TIMER_PRESETS.pomodoro.focusMinutes * 60,
+  preset: 'custom',
+  totalSeconds: 25 * 60,
+  remainingSeconds: 25 * 60,
   currentRound: 1,
-  maxRounds: TIMER_PRESETS.pomodoro.rounds,
+  maxRounds: TIMER_PRESETS.custom.rounds,
   isRunning: false,
   customConfig: {
     focusMin: 25,

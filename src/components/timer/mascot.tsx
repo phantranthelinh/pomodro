@@ -12,9 +12,8 @@ type MascotProps = {
 
 export function Mascot({ currentRound, maxRounds, isRunning, mode }: MascotProps) {
   const progress = currentRound / Math.max(1, maxRounds);
-  let stage = Math.ceil(progress * 5);
-  if (stage < 1) stage = 1;
-  if (stage > 5) stage = 5;
+  const isEvolved = progress > 0.5;
+  const mascotImage = isEvolved ? '/je/je-2.png' : '/je/je.png';
 
   let animState = 'idle';
   if (isRunning) {
@@ -56,7 +55,7 @@ export function Mascot({ currentRound, maxRounds, isRunning, mode }: MascotProps
     <div className="relative w-64 h-64 mx-auto flex items-center justify-center">
       <AnimatePresence mode="wait">
         <motion.div
-          key={`stage-${stage}`}
+          key={mascotImage}
           initial={{ opacity: 0, scale: 0.8, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 1.1, y: -10 }}
@@ -69,8 +68,8 @@ export function Mascot({ currentRound, maxRounds, isRunning, mode }: MascotProps
             className="w-full h-full relative"
           >
             <Image
-              src={`/mascot/stage${stage}.svg`}
-              alt={`Mouse mascot stage ${stage}`}
+              src={mascotImage}
+              alt={isEvolved ? "Evolved Je mascot" : "Je mascot"}
               fill
               className="object-contain"
               priority

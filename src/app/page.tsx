@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { TimerDisplay } from '@/components/timer/timer-display';
 import { TimerControls } from '@/components/timer/timer-controls';
-import { PresetSelector } from '@/components/timer/preset-selector';
+
 import { MixerPanel } from '@/components/audio/mixer-panel';
 import { StatsCard } from '@/components/social/stats-card';
 import { Mascot } from '@/components/timer/mascot';
@@ -17,7 +17,6 @@ import { motion } from 'framer-motion';
 export default function TimerPage() {
   const {
     mode,
-    preset,
     totalSeconds,
     remainingSeconds,
     currentRound,
@@ -26,7 +25,6 @@ export default function TimerPage() {
     start,
     pause,
     reset,
-    setPreset,
   } = useTimer();
 
   const { requestPermission, notifyTimerComplete } = useNotification();
@@ -59,57 +57,41 @@ export default function TimerPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden transition-colors duration-500 flex justify-center items-center">
-      
-      <main className="relative z-10 w-full max-w-sm mx-auto px-4 py-8 flex flex-col items-center justify-between min-h-[90vh]">
-        {/* Header */}
-        <header className="w-full text-center mb-6">
-          <h1 className="text-xl font-bold tracking-tight text-black/80">JerryPomo</h1>
-        </header>
+      <main className="relative z-10 w-full max-w-sm mx-auto px-4 flex flex-col items-center justify-center gap-6 min-h-screen">
+        {/* Mascot */}
+        <Mascot
+          currentRound={currentRound}
+          maxRounds={maxRounds}
+          isRunning={isRunning}
+          mode={mode}
+        />
 
-        {/* Hero Section */}
-        <div className="flex-1 flex flex-col items-center justify-center w-full space-y-6">
-          <Mascot 
-            currentRound={currentRound} 
-            maxRounds={maxRounds} 
-            isRunning={isRunning} 
-            mode={mode} 
-          />
-          
-          <motion.p 
-            key={statusText}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-lg font-medium text-black/60 tracking-wide"
-          >
-            {statusText}
-          </motion.p>
-          
-          <TimerDisplay
-            remainingSeconds={remainingSeconds}
-            totalSeconds={totalSeconds}
-            mode={mode}
-            currentRound={currentRound}
-            maxRounds={maxRounds}
-          />
-        </div>
+        <motion.p
+          key={statusText}
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-lg font-medium text-black/60 tracking-wide"
+        >
+          {statusText}
+        </motion.p>
 
-        {/* Controls & Presets */}
-        <div className="w-full mt-8 space-y-8 flex flex-col items-center">
-          <PresetSelector
-            activePreset={preset}
-            onSelect={setPreset}
-            disabled={isRunning}
-          />
+        <TimerDisplay
+          remainingSeconds={remainingSeconds}
+          totalSeconds={totalSeconds}
+          mode={mode}
+          currentRound={currentRound}
+          maxRounds={maxRounds}
+        />
 
-          <TimerControls
-            isRunning={isRunning}
-            mode={mode}
-            onStart={handleStart}
-            onPause={pause}
-            onReset={reset}
-          />
-        </div>
-        
+        {/* Controls */}
+        <TimerControls
+          isRunning={isRunning}
+          mode={mode}
+          onStart={handleStart}
+          onPause={pause}
+          onReset={reset}
+        />
+
       </main>
 
       {/* Daily Tracking Bottom Sheet — fixed overlay, works for all users */}

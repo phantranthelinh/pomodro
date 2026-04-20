@@ -1,7 +1,7 @@
-# 🐭 JerryPomo: Focus with Aura
+# 🐭 JeFocus: Focus with Aura
 
 
-A premium, interactive Pomodoro timer designed for modern focus. **JerryPomo** transforms the standard focus timer into an emotionally engaging experience featuring a living mascot, premium aesthetic, and intelligent tracking.
+A premium, interactive Pomodoro timer designed for modern focus. **JeFocus** transforms the standard focus timer into an emotionally engaging experience featuring a living mascot, premium aesthetic, and intelligent tracking.
 
 ## ✨ Features
 
@@ -48,7 +48,7 @@ A premium, interactive Pomodoro timer designed for modern focus. **JerryPomo** t
 
 ## 📐 Design Philosophy
 
-JerryPomo follows the **Obsidian Aura** design principles:
+JeFocus follows the **Obsidian Aura** design principles:
 - **Calmness**: Neutral backgrounds with soft, high-contrast typography.
 - **Feedback**: Every action has a subtle, high-quality animation.
 - **Engagement**: The mascot provides a sense of companionship during long focus sessions.

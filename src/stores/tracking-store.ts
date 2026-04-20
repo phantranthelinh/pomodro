@@ -68,7 +68,7 @@ export const useTrackingStore = create<TrackingState & TrackingActions>()(
       },
     }),
     {
-      name: 'jerrypomo-tracking',
+      name: 'jefocus-tracking',
     }
   )
 );

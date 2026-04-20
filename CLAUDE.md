@@ -1,8 +1,8 @@
-# CLAUDE.md — Pomodro
+# CLAUDE.md — JeFocus
 
 ## Project Overview
 
-Pomodoro Timer web app — multi-channel ambient audio mixer, Glassmorphism UI (`#D0FFD6`), social features. Stack: Next.js 15 App Router, tRPC, Zustand, Howler.js, Prisma + PostgreSQL, NextAuth.js, Tailwind CSS.
+Pomodoro Timer web app (JeFocus) — multi-channel ambient audio mixer, Glassmorphism UI (`#D0FFD6`), social features. Stack: Next.js 15 App Router, tRPC, Zustand, Howler.js, Prisma + PostgreSQL, NextAuth.js, Tailwind CSS.
 
 ## Hard Rules — "The Law"
 
